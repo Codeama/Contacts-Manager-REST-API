@@ -8,6 +8,7 @@ This is a CRUD Contacts Manager web API with secured endpoints.
 1. JSON Web Tokens (JWT)
 2. Bcrypt.js
 3. Moment.js
+4. Mocha and Chai test libraries
 
 
 ### Requirements/Functionality
