@@ -1,7 +1,6 @@
 const User = require('../models/users');
 const Contact = require('../models/contacts');
-const {sendReminder} = require('../middleware/index');
-const {formatDate} = require('../utils/index');
+const {formatDate, sendReminder} = require('../utils/index');
 
 
  class ContactsController{
@@ -9,24 +8,20 @@ const {formatDate} = require('../utils/index');
         try{
             const user = await User.findOne({email: req.body.authorisedUser});
             const contacts = await Contact.find({userId: user._id}).populate("userId", "email");
-            console.log("Contacts:", user.email);
-            sendReminder();
-            //console.log("Moment: ", moment().utc("07:34", "HH:mm"))
             res.status(200).json({payload: contacts});
-            }catch(err){
-              res.status(500).json({error: `${err}`, message: "Can't load contacts"});
-            }
+        }catch(err){
+            res.status(500).json({error: `${err}`, message: "Can't load contacts"});
+        }
     }
 
     static async getContactById (req, res){
         try{
             const user = await User.findOne({email: req.body.authorisedUser})
             const contact = await Contact.findOne({userId: user._id, _id: req.params.id}).populate("userId", "email");
-            console.log("Contacts:", contact)
             res.status(200).json({payload: contact});
-            }catch(err){
-                res.status(404).json({error: `${err}`, message: "Can't find contact"});
-            }
+        }catch(err){
+              res.status(404).json({error: `${err}`, message: "Can't find contact"});
+        }
     }
 
     static async addNewContact (req, res){
@@ -41,7 +36,6 @@ const {formatDate} = require('../utils/index');
             //birthday logic here
             let contact;
             if(req.body.birthday){
-                //const date = new Date(req.body.birthday)
                 const DOB = formatDate(req.body.birthday); //YYYY-MM-DD
                 const day = DOB.format('D')
                 const month = DOB.format('M');
@@ -69,17 +63,14 @@ const {formatDate} = require('../utils/index');
             let contact;
         if(req.body.birthday){
             const DOB = formatDate(req.body.birthday)//, "YYYY/MM/DD");
-            console.log("Entered birthday: ", req.body.birthday)
-            console.log("Formatted bday: ", DOB)
             contact = await Contact.findOneAndUpdate({userId: user._id, _id:req.params.id}, {birthday: DOB,...req.body}, {new: true});
         }else{
             //find contact with userId and contact params
             contact = await Contact.findOneAndUpdate({userId: user._id, _id:req.params.id}, {...req.body}, {new: true});
-        }console.log("Updated contact: ", contact);
+        }
             res.status(200).json({success: true, message: "Contact updated", contact: contact})
         }catch(err){
-            console.log("Error message: ", err)
-        res.status(500).json({error: err, message: "Error making changes to contact"});
+            res.status(500).json({error: err, message: "Error making changes to contact"});
         }   
     }
 
@@ -94,7 +85,6 @@ const {formatDate} = require('../utils/index');
             const email = await Contact.findOneAndUpdate({userId: user._id, _id: contactid, emails: {$elemMatch: {_id: emailid}}}, {$set: {'emails.$.email': req.body.email}}, {new : true});
             res.status(200).json({success: true, message: "Contact updated", contact: `${email}`})
         }catch(err){
-            console.log("Error message: ", err)
             res.status(500).json({error: `${err}`, message: "Error adding new number to contact"});
         }    
     }
@@ -110,7 +100,6 @@ const {formatDate} = require('../utils/index');
             const contact = await Contact.findOneAndUpdate({userId: user._id, _id: contactid}, {$push: {'emails': req.body.email}}, {new : true});
             res.status(200).json({success: true, message: "Contact updated", contact: `${contact}`})
         }catch(err){
-            console.log("Error message: ", err)
             res.status(500).json({error: `${err}`, message: "Error adding new email to contact"});
         }    
     }
@@ -126,8 +115,7 @@ const {formatDate} = require('../utils/index');
             const contact = await Contact.findOneAndUpdate({userId: user._id, _id: contactid}, {$push: {'phones': req.body.phone}}, {new : true});
             res.status(200).json({success: true, message: "Contact updated", contact: `${contact}`})
         }catch(err){
-            console.log("Error message: ", err)
-        res.status(500).json({error: `${err}`, message: "Error adding new number to contact"});
+            res.status(500).json({error: `${err}`, message: "Error adding new number to contact"});
         }
     }
 
@@ -142,8 +130,7 @@ const {formatDate} = require('../utils/index');
             const contact = await Contact.findOneAndUpdate({userId: user._id, _id: contactid}, {$push: {'addresses': req.body.address}}, {new : true});
             res.status(200).json({success: true, message: "Contact updated", contact: `${contact}`})
         }catch(err){
-            console.log("Error message: ", err)
-        res.status(500).json({error: `${err}`, message: "Error adding new address to contact"});
+            res.status(500).json({error: `${err}`, message: "Error adding new address to contact"});
         }    
     }
 
@@ -165,7 +152,6 @@ const {formatDate} = require('../utils/index');
             
             res.status(200).json({success: true, contact: `${updatedContact}`})
         }catch(err){
-            console.log("Error message: ", err)
         res.status(500).json({error: err, message: "Error adding new number to contact"});
         }    
     }
@@ -182,14 +168,12 @@ const {formatDate} = require('../utils/index');
             const phones = Object.keys(req.body.phones);
             phones.forEach(phone => {
                 contact.phones[phone] = req.body.phones[phone];
-                console.log("phone: ", contact.phones[phone])
             })
             const updatedContact = await contact.save();
             
             res.status(200).json({success: true, contact: `${updatedContact}`})
         }catch(err){
-            console.log("Error message: ", err)
-        res.status(500).json({error: err, message: "Error adding new number to contact"});
+            res.status(500).json({error: err, message: "Error adding new number to contact"});
         }    
     }
 
@@ -205,14 +189,12 @@ const {formatDate} = require('../utils/index');
             const addresses = Object.keys(req.body.addresses);
             addresses.forEach(address => {
                 contact.addresses[address] = req.body.addresses[address];
-                console.log("address: ", contact.addresses[address])
             })
             const updatedContact = await contact.save();
             
             res.status(200).json({success: true, contact: `${updatedContact}`})
         }catch(err){
-            console.log("Error message: ", err)
-        res.status(500).json({error: `${err}`, message: "Error adding new address to contact"});
+            res.status(500).json({error: `${err}`, message: "Error adding new address to contact"});
         }   
     }
  }
