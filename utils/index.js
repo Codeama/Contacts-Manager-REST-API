@@ -1,5 +1,6 @@
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
+const moment = require('moment');
 
 // Authentication
 const comparePassword = (candidatePassword, password) => {
@@ -11,8 +12,12 @@ const comparePassword = (candidatePassword, password) => {
     });
   };
 
+  const formatDate = date => {
+    return moment(date, 'YYYY/MM/DD');
+  }
+
 
 
   module.exports = {
-      comparePassword
+      comparePassword, formatDate
   }

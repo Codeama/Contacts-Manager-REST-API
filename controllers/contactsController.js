@@ -1,6 +1,7 @@
 const User = require('../models/users');
 const Contact = require('../models/contacts');
-const {sendEmail} = require('../middleware/index');
+const {sendReminder} = require('../middleware/index');
+const {formatDate} = require('../utils/index');
 
 
  class ContactsController{
@@ -9,6 +10,8 @@ const {sendEmail} = require('../middleware/index');
             const user = await User.findOne({email: req.body.authorisedUser});
             const contacts = await Contact.find({userId: user._id}).populate("userId", "email");
             console.log("Contacts:", user.email);
+            sendReminder();
+            //console.log("Moment: ", moment().utc("07:34", "HH:mm"))
             res.status(200).json({payload: contacts});
             }catch(err){
               res.status(500).json({error: `${err}`, message: "Can't load contacts"});
@@ -38,7 +41,12 @@ const {sendEmail} = require('../middleware/index');
             //birthday logic here
             let contact;
             if(req.body.birthday){
-                const DOB = new Date(req.body.birthday)//, "YYYY-MM-DD"); //YYYY-MM-DD
+                //const date = new Date(req.body.birthday)
+                const DOB = formatDate(req.body.birthday); //YYYY-MM-DD
+                const day = DOB.format('D')
+                const month = DOB.format('M');
+                console.log("Day: ", day);
+                console.log("Month: ", month)
                 contact = new Contact({userId: user._id, birthday: DOB, ...req.body});
             }else{
             contact = new Contact({userId: user._id, ...req.body});
@@ -60,7 +68,7 @@ const {sendEmail} = require('../middleware/index');
             //let DOB;
             let contact;
         if(req.body.birthday){
-            const DOB = new Date(req.body.birthday)//, "YYYY/MM/DD"); //date inconsistency for certain months, e.g October becomes September based on the API numbering
+            const DOB = formatDate(req.body.birthday)//, "YYYY/MM/DD");
             console.log("Entered birthday: ", req.body.birthday)
             console.log("Formatted bday: ", DOB)
             contact = await Contact.findOneAndUpdate({userId: user._id, _id:req.params.id}, {birthday: DOB,...req.body}, {new: true});
