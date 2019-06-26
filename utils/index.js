@@ -20,14 +20,13 @@ const formatDate = date => {
 }
 
 //Sendgrid emailer
-const sendReminder = () => {
+const sendReminder = (recipient, contactName) => {
 sgMail.setApiKey(config.SENDGRID_API_KEY);
 const msg = {
-  to: 'bukolaj2018@gmail.com',
+  to: recipient,
   from: 'noreply@contactsmanager.com',
-  subject: 'Birthday',
-  text: `and easy to do anywhere, even with Node.js ${moment().unix()}`,
-  html: '<strong>and easy to do anywhere, even with Node.js</strong>',
+  subject: `It's ${contactName}'s Birthday today!!!`,
+  html: '<strong>Say happy birthday to them. Share some love :-).</strong>',
 };
 sgMail.send(msg);
 }

@@ -35,10 +35,10 @@ console.log("Config:", config)
  async function checkBirthday(){
   const contacts = await Contacts.find({}, 'name birthday').populate('userId')//.then(contacts => console.log(`Contacts: ${contacts}`));
   contacts.map(b => console.log(`${moment(b.birthday)}`));
-  const checkedDate = contacts.filter(contact => isToday(contact.birthday));
-  console.log(`Birthdays today: ${checkedDate}`) //${checkedDate[0].userId.email}`)
+  contacts.filter(contact => isToday(contact.birthday)).forEach(contact => sendReminder(contact.userId.email, contact.name));
+  // console.log(`Birthdays today: ${birthdays}`) //${checkedDate[0].userId.email}`)
   //send message to owners
-
+  //birthdays.forEach
 }
 checkBirthday();
 
