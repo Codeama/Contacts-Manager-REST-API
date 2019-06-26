@@ -9,6 +9,7 @@ const mongoose = require('mongoose');
 const config = require('./config');
 const {validateUser} = require('./middleware/index');
 const {checkBirthday} = require('./utils/index')
+var CronJob = require('cron').CronJob;
 
 
 
@@ -28,9 +29,15 @@ mongoose.connect(`${config.MONGO_URL}`, {useNewUrlParser: true,
   //check config
 console.log("Config:", config)
 
+console.log('Before job instantiation');
+const job = new CronJob('0 6 * * *', function() {
+	const d = new Date();
+  console.log('Every day at 6 AM:', d);
+  checkBirthday();
+});
+console.log('After job instantiation');
+job.start();
 
-
-checkBirthday();
 
 
 
