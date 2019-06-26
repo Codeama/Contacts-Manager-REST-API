@@ -8,10 +8,8 @@ const helmet = require('helmet');
 const mongoose = require('mongoose');
 const config = require('./config');
 const {validateUser} = require('./middleware/index');
-const {sendReminder} = require('./utils/index');
-const Users = require('./models/users');
-const Contacts = require('./models/contacts');
-const moment = require('moment')
+const {checkBirthday} = require('./utils/index')
+
 
 
 var indexRouter = require('./routes/index');
@@ -30,23 +28,11 @@ mongoose.connect(`${config.MONGO_URL}`, {useNewUrlParser: true,
   //check config
 console.log("Config:", config)
 
-//finds contacts and show (populate) owners
-//grab birthdays and check if it is today, if so send birthday reminder to owner
- async function checkBirthday(){
-  const contacts = await Contacts.find({}, 'name birthday').populate('userId')//.then(contacts => console.log(`Contacts: ${contacts}`));
-  contacts.map(b => console.log(`${moment(b.birthday)}`));
-  contacts.filter(contact => isToday(contact.birthday)).forEach(contact => sendReminder(contact.userId.email, contact.name));
-  // console.log(`Birthdays today: ${birthdays}`) //${checkedDate[0].userId.email}`)
-  //send message to owners
-  //birthdays.forEach
-}
-checkBirthday();
 
-function isToday(date){
-  const isSameDay = moment().format('D') === moment(date).format('D');
-  const isSameMonth = moment().format('M') === moment(date).format('M');
-  return isSameDay && isSameMonth;
-}
+
+// checkBirthday();
+
+
 
 
 
