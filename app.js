@@ -30,7 +30,7 @@ console.log("Config:", config)
 
 
 
-// checkBirthday();
+checkBirthday();
 
 
 

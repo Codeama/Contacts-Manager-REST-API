@@ -30,8 +30,9 @@ function isToday(date){
 //grab birthdays and check if it is today, if so send birthday reminder to owner
 async function checkBirthday(){
   const contacts = await Contacts.find({}, 'name birthday').populate('userId');
-  contacts.map(b => console.log(`${moment(b.birthday)}`));
-  contacts.filter(contact => isToday(contact.birthday)).forEach(contact => sendReminder(contact.userId.email, contact.name));
+  contacts.forEach(contact => {
+    if(isToday(contact.birthday))
+      sendReminder(contact.userId.email, contact.name)});
 }
 
 //Sendgrid emailer
