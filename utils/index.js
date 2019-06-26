@@ -1,7 +1,7 @@
 const bcrypt = require("bcryptjs");
 const moment = require('moment');
 const sgMail = require('@sendgrid/mail');
-const consfig = require('../config/index');
+const config = require('../config/index');
 
 
 // Authentication
@@ -24,11 +24,10 @@ const sendReminder = () => {
 sgMail.setApiKey(config.SENDGRID_API_KEY);
 const msg = {
   to: 'bukolaj2018@gmail.com',
-  from: 'bkljimoh@gmail.com',
-  subject: 'Sending with Twilio SendGrid is Fun',
+  from: 'noreply@contactsmanager.com',
+  subject: 'Birthday',
   text: `and easy to do anywhere, even with Node.js ${moment().unix()}`,
   html: '<strong>and easy to do anywhere, even with Node.js</strong>',
-  send_at: moment().add(2, 'hours').unix()
 };
 sgMail.send(msg);
 }

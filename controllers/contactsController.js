@@ -152,7 +152,7 @@ const {formatDate, sendReminder} = require('../utils/index');
             
             res.status(200).json({success: true, contact: `${updatedContact}`})
         }catch(err){
-        res.status(500).json({error: err, message: "Error adding new number to contact"});
+        res.status(500).json({error: `${err}`, message: "Error adding new number to contact"});
         }    
     }
 
@@ -173,7 +173,7 @@ const {formatDate, sendReminder} = require('../utils/index');
             
             res.status(200).json({success: true, contact: `${updatedContact}`})
         }catch(err){
-            res.status(500).json({error: err, message: "Error adding new number to contact"});
+            res.status(500).json({error: `${err}`, message: "Error adding new number to contact"});
         }    
     }
 
