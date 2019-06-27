@@ -1,5 +1,5 @@
 require ('newrelic');
-var createError = require('http-errors');
+var http = require('http');
 var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
@@ -29,16 +29,20 @@ mongoose.connect(`${config.MONGO_URL}`, {useNewUrlParser: true,
   //check config
 console.log("Config:", config)
 
+//Cron job
 console.log('Before job instantiation');
 const job = new CronJob('0 6 * * *', function() {
-	const d = new Date();
-  console.log('Every day at 6 AM:', d);
+	const date = new Date();
+  console.log('Every day at 6 AM:', date);
   checkBirthday();
 });
 console.log('After job instantiation');
 job.start();
 
-
+//ping site every 15 minutes
+setInterval(function() {
+    http.get("https://bukola-contacts-manager-api.herokuapp.com");
+}, 900000);
 
 
 
