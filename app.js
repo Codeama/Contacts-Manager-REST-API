@@ -41,7 +41,7 @@ job.start();
 
 //ping site every 15 minutes
 setInterval(function() {
-    http.get("https://bukola-contacts-manager-api.herokuapp.com");
+    http.get("http://bukola-contacts-manager-api.herokuapp.com");
 }, 900000);
 
 
