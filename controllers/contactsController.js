@@ -37,10 +37,6 @@ const {formatDate, sendReminder} = require('../utils/index');
             let contact;
             if(req.body.birthday){
                 const DOB = formatDate(req.body.birthday); //YYYY-MM-DD
-                const day = DOB.format('D')
-                const month = DOB.format('M');
-                console.log("Day: ", day);
-                console.log("Month: ", month)
                 contact = new Contact({userId: user._id, birthday: DOB, ...req.body});
             }else{
             contact = new Contact({userId: user._id, ...req.body});
