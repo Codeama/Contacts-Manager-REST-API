@@ -31,7 +31,7 @@ console.log("Config:", config)
 
 //Cron job
 console.log('Before job instantiation');
-const job = new CronJob('6 10 * * *', function() {
+const job = new CronJob('0 6 * * *', function() {
 	const date = new Date();
   console.log('Every day at 6 AM:', date);
   checkBirthday();
