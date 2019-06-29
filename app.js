@@ -32,7 +32,7 @@ console.log("Config:", config)
 //Cron job
 console.log('Before job instantiation');
 const job = new CronJob('0 6 * * *', function() {
-  console.log('Checked birthdays at 6 AM:', moment());
+  console.log(`Job started: ${moment()}`);
   checkBirthday();
 }, null, true, 0);
 console.log('After job instantiation');
