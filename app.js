@@ -34,7 +34,7 @@ console.log('Before job instantiation');
 const job = new CronJob('0 6 * * *', function() {
   console.log('Checked birthdays at 6 AM:', moment());
   checkBirthday();
-}, null, true, "Europe/London");
+}, null, true, 0);
 console.log('After job instantiation');
 job.start();
 
